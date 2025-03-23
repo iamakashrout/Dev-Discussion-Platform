@@ -1,13 +1,23 @@
 import express from 'express';
 import connectDB from "./db.js";
+import cors from "cors";
 
 const app = express();
+
+
+// Middleware
+app.use(cors()); // Allow cross-origin requests
+app.use(express.json()); // Enable JSON parsing
 
 // Connect to MongoDB Atlas
 connectDB();
 
 app.get('/', (req, res) => {
     res.send('Hello, Node.js server running!');
+});
+
+app.get("/api", (req, res) => {
+    res.json({ message: "Hello from the backend!" });
 });
 
 const PORT = process.env.PORT || 5000;
