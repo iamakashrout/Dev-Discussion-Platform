@@ -1,8 +1,9 @@
 import { useState } from "react";
-import {  useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-
-const BASE_URL = "http://localhost:5000"; 
+import "./Login.css"; 
+import image from "./assets/image.png"; 
+const BASE_URL = "http://localhost:5000";
 
 const Login = ({ setAuth }) => {
   const [emailid, setEmailId] = useState("");
@@ -12,8 +13,7 @@ const Login = ({ setAuth }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${BASE_URL}/auth/login`, { emailid: emailid, password });
-      
+      const response = await axios.post(`${BASE_URL}/auth/login`, { emailid, password });
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
         setAuth(true);
@@ -28,12 +28,30 @@ const Login = ({ setAuth }) => {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <input type="email" placeholder="Email" value={emailid} onChange={(e) => setEmailId(e.target.value)} required />
-      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-      <button type="submit">Login</button>
-      <p>Not a member? <Link to="/register">Register here</Link></p>
-    </form>
+    <div className="register-container">
+          {/* Left Image Section */}
+          <div className="register-image">
+  <img src={image} alt="Welcome" />
+  <div className="welcome-text">
+    <h1>
+      <span>Welcome back to </span>
+      <span style={{ color:  "#8a2be2"}}>Dev</span>
+      <span style={{ color: "black" }}>Sphere</span>!
+    </h1>
+    <h3>You can sign in to access your existing account.</h3>
+  </div>
+</div>
+
+      <div className="register-form">
+        <form onSubmit={handleLogin}>
+          <h2>Login</h2>
+          <input type="email" placeholder="Email" value={emailid} onChange={(e) => setEmailId(e.target.value)} required />
+          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <button type="submit">Login</button>
+          <p>Not a member? <Link to="/register" className="login-link">Register here</Link></p>
+        </form>
+      </div>
+    </div>
   );
 };
 

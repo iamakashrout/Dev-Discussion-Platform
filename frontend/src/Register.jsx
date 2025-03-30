@@ -1,54 +1,7 @@
-
-
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
-const BASE_URL = "http://localhost:5000"; 
-
-// const Register = ({ setAuth }) => {
-//     const [formData, setFormData] = useState({ emailid: "", password: "", name: "", phone: "", picturePath: "", githubId: "", linkedinId: "", friends: [], location: "" });
-//     const navigate = useNavigate();
-//     const [emailid, setEmailid] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [name, setName] = useState("");
-//   const [phone, setPhone] = useState("");
-//   const [picturePath, setPicturePath] = useState("");
-//   const [githubId, setGithubId] = useState("");
-//   const [linkedinId, setLinkedinId] = useState("");
-//   const [location, setLocation] = useState("");
-//   const [friends, setFriends] = useState("");
-
-//     const handleRegister = async (e) => {
-//       e.preventDefault();
-//       const response = await axios.post(`${BASE_URL}/auth/register`, formData);
-//       if (response.data.success) {
-//         localStorage.setItem("token", response.data.token);
-//         setAuth(true);
-//         navigate("/");
-//       }
-//     };
-  
-//     return (
-//       <form onSubmit={handleRegister}>
-//         <input type="email" placeholder="Email" value={emailid} onChange={(e) => setEmailid(e.target.value)} required />
-//       <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-//       <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
-//       <input type="text" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
-//       <input type="text" placeholder="Picture Path" value={picturePath} onChange={(e) => setPicturePath(e.target.value)} />
-//       <input type="text" placeholder="GitHub ID" value={githubId} onChange={(e) => setGithubId(e.target.value)} />
-//       <input type="text" placeholder="LinkedIn ID" value={linkedinId} onChange={(e) => setLinkedinId(e.target.value)} />
-//       <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} required />
-//       <input type="text" placeholder="Friends (comma-separated)" value={friends} onChange={(e) => setFriends(e.target.value)} />
-      
-//         <button type="submit">Register</button>
-//         <p>Already a member? <Link to="/">Login here</Link></p>
-//       </form>
-//     );
-//   };
-
-// export default Register;
-
+import "./Register.css";
+import image from "./assets/image.png"; 
 
 const Register = ({ setAuth }) => {
   const [formData, setFormData] = useState({
@@ -72,40 +25,129 @@ const Register = ({ setAuth }) => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    
+
     try {
-      const response = await axios.post(`${BASE_URL}/auth/register`, {
-        ...formData,
-        friends: formData.friends.split(",").map((friend) => friend.trim()), // Convert friends to an array
+      const response = await fetch("http://localhost:5000/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          friends: formData.friends.split(",").map((friend) => friend.trim()), // Convert friends to an array
+        }),
       });
 
-      if (response.data.success) {
-        localStorage.setItem("token", response.data.token);
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem("token", data.token);
         setAuth(true);
         navigate("/");
+      } else {
+        alert("Registration failed. Please try again.");
       }
     } catch (error) {
-      console.error("Registration failed:", error);
-      alert("Registration failed. Please try again.");
+      console.error("Registration error:", error);
+      alert("An error occurred during registration.");
     }
   };
 
   return (
-    <form onSubmit={handleRegister}>
-      <input type="email" name="emailid" placeholder="Email" value={formData.emailid} onChange={handleChange} required />
-      <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-      <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
-      <input type="text" name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} required />
-      <input type="text" name="picturePath" placeholder="Picture Path" value={formData.picturePath} onChange={handleChange} />
-      <input type="text" name="githubId" placeholder="GitHub ID" value={formData.githubId} onChange={handleChange} />
-      <input type="text" name="linkedinId" placeholder="LinkedIn ID" value={formData.linkedinId} onChange={handleChange} />
-      <input type="text" name="location" placeholder="Location" value={formData.location} onChange={handleChange} required />
-      <input type="text" name="friends" placeholder="Friends (comma-separated)" value={formData.friends} onChange={handleChange} />
-      <button type="submit">Register</button>
-      <p>Already a member? <Link to="/">Login here</Link></p>
-     </form>
-    );
-  };
+    <div className="register-container">
+      {/* Left Image Section */}
+      <div className="register-image">
+        <img src={image} alt="Welcome" />
+        <div className="welcome-text">
+        <h1>
+      <span>Welcome to </span>
+      <span style={{ color:  "#8a2be2"}}>Dev</span>
+      <span style={{ color: "black" }}>Sphere</span>!
+    </h1>
+    <h3>You can create a new account.</h3>
+        </div>
+      </div>
+
+      {/* Right Form Section */}
+      <div className="register-form">
+        <form onSubmit={handleRegister}>
+          <h2>Register</h2>
+          <input
+            type="email"
+            name="emailid"
+            placeholder="Email"
+            value={formData.emailid}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="picturePath"
+            placeholder="Picture Path"
+            value={formData.picturePath}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="githubId"
+            placeholder="GitHub ID"
+            value={formData.githubId}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="linkedinId"
+            placeholder="LinkedIn ID"
+            value={formData.linkedinId}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="location"
+            placeholder="Location"
+            value={formData.location}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="friends"
+            placeholder="Friends (comma-separated)"
+            value={formData.friends}
+            onChange={handleChange}
+          />
+          <button type="submit">Register</button>
+          <p>
+            Already a member?{" "}
+            <Link to="/" className="login-link">
+              Login here
+            </Link>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default Register;
-
