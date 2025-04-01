@@ -28,27 +28,23 @@ const Network = () => {
     useEffect(() => {
         // Retrieve the userId of the logged-in user from localStorage
         const userId = localStorage.getItem("userId");
-        console.log("User ID from localStorage:", userId);  // Log to check
-
         if (!userId) {
             setError("User is not logged in.");
             setLoading(false);
             return;
         }
 
-        // Fetching the list of friends from the backend using the userId
         axios.get(`${BASE_URL}/user/${userId}/friends`)
             .then((response) => {
-                setFriends(response.data);  // Set the friends list to state
+                setFriends(response.data);  
                 setLoading(false);
             })
             .catch((err) => {
-                setError(err.message);  // Set the error message if something goes wrong
+                setError(err.message);  
                 setLoading(false);
             });
-    }, []);  // Empty array to only run once on mount
+    }, []);  
 
-    // Render a loading message or the actual friends list
     if (loading) {
         return <div>Loading friends...</div>;
     }
