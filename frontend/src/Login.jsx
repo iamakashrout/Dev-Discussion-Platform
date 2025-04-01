@@ -17,6 +17,7 @@ const Login = ({ setAuth }) => {
       const response = await axios.post(`${BASE_URL}/auth/login`, { emailid, password });
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data._id);
         setAuth(true);  
         alert("Login successful!");
         navigate("/home");
