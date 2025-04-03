@@ -1,0 +1,226 @@
+/* Chat Container */
+.help-chat {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    background: rgba(25, 12, 52, 0.95);
+    backdrop-filter: blur(14px);
+    color: white;
+    border-radius: 16px;
+    box-shadow: 0px 6px 24px rgba(155, 80, 255, 0.4);
+    font-family: "Poppins", sans-serif;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Header */
+.help-chat-header {
+    position: relative;
+    padding: 10px;
+    background-color: #7b41d9;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+  }
+
+.help-chat-close {
+    position: absolute;
+    top: 0px;
+    right: -160px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+  }
+
+.help-chat-close:hover {
+    color: #ffd700;
+   
+}
+
+/* Chat Body */
+.help-chat-body {
+    max-height: 320px;
+    overflow-y: auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+/* Custom Scrollbar */
+.help-chat-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.help-chat-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.placeholder-text {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Messages */
+.message {
+    max-width: 75%;
+    padding: 12px 16px;
+    margin: 6px 0;
+    border-radius: 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    animation: slideIn 0.2s ease-in-out;
+}
+
+/* User Message */
+.user-message {
+    background: linear-gradient(135deg, #7b3fe4, #9b50ff);
+    color: white;
+    align-self: flex-end;
+    border-radius: 12px 12px 0 12px;
+    box-shadow: 0 2px 10px rgba(155, 80, 255, 0.4);
+}
+
+/* Bot (AI) Message */
+.bot-message {
+    background: linear-gradient(135deg, #6a0dad, #007bff);
+    color: white;
+    align-self: flex-start;
+    border-radius: 12px 12px 12px 0;
+    box-shadow: 0 2px 10px rgba(0, 123, 255, 0.4);
+}
+
+/* Chat Footer */
+.help-chat-footer {
+    display: flex;
+    padding: 14px;
+    background: rgba(25, 12, 52, 0.85);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    gap: 10px;
+}
+
+/* Input Field */
+.chat-input {
+    flex-grow: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transition: 0.3s;
+}
+
+.chat-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.chat-input:focus {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Send Button */
+.send-button {
+    background: linear-gradient(135deg, #7b3fe4, #9b50ff);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 2px 10px rgba(155, 80, 255, 0.4);
+}
+
+.send-button:hover {
+    background: linear-gradient(135deg, #9b50ff, #bb66ff);
+    box-shadow: 0 4px 12px rgba(155, 80, 255, 0.8);
+    transform: scale(1.05);
+}
+
+.send-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+/* Error Message */
+.error-message {
+    text-align: center;
+    color: #ff4d4d;
+    padding: 8px;
+}
+
+.retry-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.retry-button:hover {
+    background-color: #cc0000;
+}
+
+/* Loading Indicator */
+.loading {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Button to Stop AI */
+.stop-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.stop-button:hover {
+    background-color: #cc0000;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
