@@ -16,6 +16,15 @@
     z-index: 1000;
     animation: fadeIn 0.3s ease-in-out;
 }
+.code-block {
+    background: #222;
+    color: #fff;
+    font-family: "Fira Code", monospace;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+    overflow-x: auto;
+}
 
 /* Header */
 .help-chat-header {

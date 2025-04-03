@@ -1,24 +1,42 @@
 import { useState, useEffect, useRef } from "react";
 import "./HelpChat.css";
-import { BASE_URL } from "../../helper";
-
+import BASE_URL from "../../config";
 
 export default function HelpChat({ onClose }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
+
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+    const formatMessage = (content) => {
+        
+        const codeBlockRegex = /```([\s\S]*?)```/g;
+
+        if (codeBlockRegex.test(content)) {
+            return content.split(codeBlockRegex).map((part, index) =>
+                index % 2 === 1 ? (
+                    <pre key={index} className="code-block">
+                        <code>{part.trim()}</code>
+                    </pre>
+                ) : (
+                    <p key={index}>{part}</p>
+                )
+            );
+        }
+        return <p>{content}</p>;
+    };
+
     const sendMessage = async (event) => {
         event.preventDefault();
         if (!input.trim()) return;
 
         const userMessage = { role: "user", content: input };
-        setMessages((prev) => [...prev, userMessage]); // Add user message to UI
+        setMessages((prev) => [...prev, userMessage]); 
         setInput("");
         setLoading(true);
 
@@ -33,7 +51,7 @@ export default function HelpChat({ onClose }) {
             if (data.error) throw new Error(data.error);
 
             const botMessage = { role: "assistant", content: data.response };
-            setMessages((prev) => [...prev, botMessage]); // Add bot message to UI
+            setMessages((prev) => [...prev, botMessage]); 
         } catch (error) {
             console.error("Error:", error);
             setMessages((prev) => [...prev, { role: "assistant", content: "Something went wrong!" }]);
@@ -52,7 +70,7 @@ export default function HelpChat({ onClose }) {
                 {messages.length === 0 && <p className="placeholder-text">Here to help, chat away, or give suggestions!</p>}
                 {messages.map((msg, index) => (
                     <div key={index} className={`message ${msg.role === "user" ? "user-message" : "bot-message"}`}>
-                        {msg.content}
+                        {formatMessage(msg.content)}
                     </div>
                 ))}
                 {loading && <p className="loading">Loading...</p>}
