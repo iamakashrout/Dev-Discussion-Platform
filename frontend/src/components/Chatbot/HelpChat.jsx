@@ -6,7 +6,6 @@ export default function HelpChat({ onClose }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
-
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -14,9 +13,18 @@ export default function HelpChat({ onClose }) {
     }, [messages]);
 
     const formatMessage = (content) => {
-        
-        const codeBlockRegex = /```([\s\S]*?)```/g;
-
+        content = content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    
+        // Format headings with proper spacing
+        content = content.replace(/(^|\n)### (.*?)(\n|$)/g, "<h3>$2</h3><br>");
+        content = content.replace(/(^|\n)## (.*?)(\n|$)/g, "<h2>$2</h2><br>");
+        content = content.replace(/(^|\n)# (.*?)(\n|$)/g, "<h1>$2</h1><br>");
+    
+        // Format inline code (`code`)
+        content = content.replace(/`(.*?)`/g, "<code>$1</code>");
+    
+        // Format code blocks (``````)
+        const codeBlockRegex = /``````/g;
         if (codeBlockRegex.test(content)) {
             return content.split(codeBlockRegex).map((part, index) =>
                 index % 2 === 1 ? (
@@ -24,19 +32,29 @@ export default function HelpChat({ onClose }) {
                         <code>{part.trim()}</code>
                     </pre>
                 ) : (
-                    <p key={index}>{part}</p>
+                    <p key={index} dangerouslySetInnerHTML={{ __html: part }} />
                 )
             );
         }
-        return <p>{content}</p>;
+    
+        const formattedContent = content
+            .split("\n")
+            .map((line, index) => {
+                if (line.trim() === "") return <br key={index} />; // Add empty lines as breaks
+                return <p key={index} dangerouslySetInnerHTML={{ __html: line }} />;
+            });
+    
+        return formattedContent;
     };
+    
+    
 
     const sendMessage = async (event) => {
         event.preventDefault();
         if (!input.trim()) return;
 
         const userMessage = { role: "user", content: input };
-        setMessages((prev) => [...prev, userMessage]); 
+        setMessages((prev) => [...prev, userMessage]);
         setInput("");
         setLoading(true);
 
@@ -51,10 +69,13 @@ export default function HelpChat({ onClose }) {
             if (data.error) throw new Error(data.error);
 
             const botMessage = { role: "assistant", content: data.response };
-            setMessages((prev) => [...prev, botMessage]); 
+            setMessages((prev) => [...prev, botMessage]);
         } catch (error) {
             console.error("Error:", error);
-            setMessages((prev) => [...prev, { role: "assistant", content: "Something went wrong!" }]);
+            setMessages((prev) => [
+                ...prev,
+                { role: "assistant", content: "Something went wrong!" },
+            ]);
         } finally {
             setLoading(false);
         }
@@ -63,13 +84,20 @@ export default function HelpChat({ onClose }) {
     return (
         <div className="help-chat">
             <div className="help-chat-header">
-                <h2>Dev Discussion Bot</h2>
+                <h2>DevSphere Bot</h2>
                 <button className="help-chat-close" onClick={onClose}>✕</button>
             </div>
             <div className="help-chat-body">
-                {messages.length === 0 && <p className="placeholder-text">Here to help, chat away, or give suggestions!</p>}
+                {messages.length === 0 && (
+                    <p className="placeholder-text">
+                        Here to help, chat away, or give suggestions!
+                    </p>
+                )}
                 {messages.map((msg, index) => (
-                    <div key={index} className={`message ${msg.role === "user" ? "user-message" : "bot-message"}`}>
+                    <div
+                        key={index}
+                        className={`message ${msg.role === "user" ? "user-message" : "bot-message"}`}
+                    >
                         {formatMessage(msg.content)}
                     </div>
                 ))}
