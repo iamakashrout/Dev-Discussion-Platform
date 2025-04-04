@@ -1,68 +1,68 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-hot-toast";
-import axios from "axios";
-import "./ResetPassword.css";
-const BASE_URL = "http://localhost:5000";
+// import React, { useState } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
+// import { toast } from "react-hot-toast";
+// import axios from "axios";
+// import "./ResetPassword.css";
+// const BASE_URL = "http://localhost:5000";
 
-const ResetPassword = () => {
-  const [newPassword, setNewPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const { emailid } = useParams(); 
-  const navigate = useNavigate();
+// const ResetPassword = () => {
+//   const [newPassword, setNewPassword] = useState("");
+//   const [showPassword, setShowPassword] = useState(false);
+//   const { emailid } = useParams(); 
+//   const navigate = useNavigate();
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+//   const toggleShowPassword = () => {
+//     setShowPassword(!showPassword);
+//   };
 
-  const resetPassword = async () => {
-    if (!newPassword) {
-      toast.error("Please enter a new password.");
-      return;
-    }
+//   const resetPassword = async () => {
+//     if (!newPassword) {
+//       toast.error("Please enter a new password.");
+//       return;
+//     }
 
-    try {
-      const response = await axios.post(`${BASE_URL}/auth/reset-password/${emailid}`, { newPassword });
+//     try {
+//       const response = await axios.post(`${BASE_URL}/auth/reset-password/${emailid}`, { newPassword });
 
-      if (response.status === 200) {
-        toast.success("Password reset successfully!");
-        navigate("/");
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error("Something went wrong. Try again.");
-    }
-  };
+//       if (response.status === 200) {
+//         toast.success("Password reset successfully!");
+//         navigate("/");
+//       } else {
+//         toast.error(response.data.message);
+//       }
+//     } catch (error) {
+//       toast.error("Something went wrong. Try again.");
+//     }
+//   };
 
-  return (
-<div className="reset-password-container">
-      <div className="reset-password-card">
-        <h2>Reset Password</h2>
+//   return (
+// <div className="reset-password-container">
+//       <div className="reset-password-card">
+//         <h2>Reset Password</h2>
 
-        {/* Input Field */}
-        <div className="input-wrapper">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter new password"
-            className="reset-password-input"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </div>
+//         {/* Input Field */}
+//         <div className="input-wrapper">
+//           <input
+//             type={showPassword ? "text" : "password"}
+//             placeholder="Enter new password"
+//             className="reset-password-input"
+//             value={newPassword}
+//             onChange={(e) => setNewPassword(e.target.value)}
+//           />
+//         </div>
 
-        {/* Show Password Button Below Input */}
-        <button type="button" className="show-password-btn" onClick={toggleShowPassword}>
-          {showPassword ? "Hide Password" : "Show Password"}
-        </button>
+//         {/* Show Password Button Below Input */}
+//         <button type="button" className="show-password-btn" onClick={toggleShowPassword}>
+//           {showPassword ? "Hide Password" : "Show Password"}
+//         </button>
 
-        {/* Reset Password Button */}
-        <button className="reset-password-btn" onClick={resetPassword}>
-          Reset Password
-        </button>
-      </div>
-    </div>
-  );
-};
+//         {/* Reset Password Button */}
+//         <button className="reset-password-btn" onClick={resetPassword}>
+//           Reset Password
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
 
-export default ResetPassword;
+// export default ResetPassword;
