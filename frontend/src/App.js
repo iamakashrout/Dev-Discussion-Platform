@@ -7,6 +7,7 @@ import Dashboard from "./Dashboard.jsx";
 import Network from "./Network.jsx";
 import Resources from "./Resources.jsx";
 import Navbar from "./components/NavBar";
+import CategoryPage from "./CategoryPage";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(
@@ -37,6 +38,7 @@ function App() {
                     <Route path="/dashboard" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
                     <Route path="/network" element={isAuthenticated ? <Network /> : <Navigate to="/login" />} />
                     <Route path="/resources" element={isAuthenticated ? <Resources /> : <Navigate to="/login" />} />
+                    <Route path="/category/:categoryName" element={<CategoryPage />} />
                 </Routes>
             </div>
         </Router>
