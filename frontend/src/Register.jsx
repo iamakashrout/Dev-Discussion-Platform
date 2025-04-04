@@ -130,13 +130,6 @@ const Register = ({ setAuth }) => {
             onChange={handleChange}
             required
           />
-          <input
-            type="text"
-            name="friends"
-            placeholder="Friends (comma-separated)"
-            value={formData.friends}
-            onChange={handleChange}
-          />
           <button type="submit">Register</button>
           <p>
             Already a member?{" "}
