@@ -6,6 +6,7 @@ import connectDB from "./db.js";
 // Import Routes
 import authRoutes from "./routes/authRoutes.js";
 import chatbotRoutes from "./routes/chatbotRoutes.js"; 
+import userRoutes from "./routes/userRoutes.js";
 dotenv.config();
 const app = express();
 
@@ -23,6 +24,7 @@ app.get("/api", (req, res) => {
 });
 app.use("/api", chatbotRoutes);
 app.use("/auth", authRoutes); 
+app.use("/users", userRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);

@@ -1,0 +1,128 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at center, #2c1345, #3d1f5b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/* Overall Container */
+.verify-otp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #241634, #3b1e68); 
+}
+
+/* OTP Card - Glassmorphism Effect */
+.verify-otp-card {
+    background: rgba(45, 20, 75, 0.75); /* Glassmorphism */
+    backdrop-filter: blur(15px);
+    padding: 2.5rem;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    animation: fadeInUp 0.7s ease-out forwards;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* OTP Icon */
+.otp-icon {
+    width: 55px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 2px 5px rgba(255, 255, 255, 0.2));
+}
+
+/* Heading */
+.verify-otp-card h2 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+/* Text */
+.verify-otp-card p {
+    font-size: 1rem;
+    margin-bottom: 18px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+}
+
+/* OTP Input - Rounded Minimalistic */
+.otp-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.otp-input {
+    width: 55px;
+    height: 55px;
+    font-size: 1.8rem;
+    text-align: center;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    box-shadow: inset 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.otp-input:focus {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 12px rgba(202, 168, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Verify Button */
+.verify-otp-btn {
+    width: 75%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #b48bff, #8353ff);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-top: 15px;
+    box-shadow: 0 6px 12px rgba(175, 135, 255, 0.4);
+}
+
+.verify-otp-btn:hover {
+    background: linear-gradient(135deg, #9c6dff, #6c3bff);
+    transform: scale(1.07);
+    box-shadow: 0 8px 16px rgba(175, 135, 255, 0.6);
+}
+
+.verify-otp-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 8px rgba(175, 135, 255, 0.3);
+}
+
+/* Fade In Animation */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
