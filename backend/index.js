@@ -26,6 +26,7 @@ app.get("/api", (req, res) => {
 app.use("/auth",authRoutes);
 //user routes
 app.use("/user",userRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

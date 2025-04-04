@@ -23,10 +23,8 @@ const Network = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
-    
 
     useEffect(() => {
-        // Retrieve the userId of the logged-in user from localStorage
         const userId = localStorage.getItem("userId");
         if (!userId) {
             setError("User is not logged in.");
@@ -73,4 +71,4 @@ const Network = () => {
     );
 };
 
-export default Network;
+ export default Network;

@@ -1,6 +1,22 @@
 import mongoose from "mongoose";
 import userModel from "../models/userModel.js";
 
+
+export const fetchUsers = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const users = await userModel.find(
+            { _id: { $ne: userId } }, //to avoid to fetch the logged in user
+            'name location picturePath'
+        );
+        res.status(200).json(users);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+
 export const getUserFriends = async (req, res) => {
     try {
         const { id } = req.params;
