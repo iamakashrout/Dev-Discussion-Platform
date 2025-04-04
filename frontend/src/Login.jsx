@@ -17,6 +17,7 @@ const Login = ({ setAuth }) => {
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
         setAuth(true);  
+        localStorage.setItem("userEmail", response.data.emailid);
         alert("Login successful!");
         navigate("/home");
       } else {
