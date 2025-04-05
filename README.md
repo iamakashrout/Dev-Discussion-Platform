@@ -20,7 +20,7 @@
 
 ---
 
-## 🧑‍💻 Tech Stack
+## Tech Stack
 
 | Layer       | Tech                    |
 |------------|--------------------------|
@@ -40,8 +40,8 @@
 git clone https://github.com/iamakashrout/Dev-Discussion-Platform.git
 cd Dev-Discussion-Platform
 
-# Step 2: Create .env file
-touch .env
+# Step 2: Create .env file in the backend folder
+
 ```
 
 ### 📄 .env File (Required)
