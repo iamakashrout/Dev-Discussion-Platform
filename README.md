@@ -47,7 +47,6 @@ cd Dev-Discussion-Platform
 
 Ask for keys to be placed inside your `.env` file:
 
-```env
 MONGO_URI=your_mongodb_key
 JWT_SECRET=your_jwt_secret_key
 GOOGLE_API_KEY=your_google_api_key
