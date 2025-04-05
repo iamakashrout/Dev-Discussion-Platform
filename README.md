@@ -1,4 +1,5 @@
-# DevSphere: Code, Connect, and Collaborate
+# DevSphere: Code, Connect, and Collaborate <br>
+Production Link : https://devsphere-xlts.onrender.com
 
 **DevSphere** is a dynamic and collaborative platform for developers and tech learners. It features an intelligent chatbot for answering tech-related queries, and a digital library for document sharing and learning resources.
 
@@ -67,4 +68,11 @@ node index.js
 cd frontend
 npm start
 ```
+ **Access the application:** Open ```http://localhost:3000``` in your browser.
+
+## Contributing
+Feel free to fork the repo and submit pull requests. Make sure to follow coding standards and write clean, modular code.
+
+## Contact
+For any issues, feel free to reach out via GitHub Issues.
 
