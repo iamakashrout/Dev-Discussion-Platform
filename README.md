@@ -42,11 +42,7 @@
 git clone https://github.com/iamakashrout/Dev-Discussion-Platform.git
 cd Dev-Discussion-Platform
 
-
-
 # Step 2: Create .env file in the backend folder
-### 📄 .env File (Required)
-
 Ask for keys to be placed inside your `.env` file:
 
 MONGO_URI=your_mongodb_key
