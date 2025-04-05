@@ -9,13 +9,12 @@
 ### Secure Auth System
 - JWT-based user authentication.
 - Scalable backend with MongoDB.  
-  <img src="https://github.com/user-attachments/assets/cef9c028-8d35-4fe0-bf50-c2d4a4b5050a" width="400"/>
+  <img src="https://github.com/user-attachments/assets/cef9c028-8d35-4fe0-bf50-c2d4a4b5050a" width="900"/>
 
 ### AI Chatbot
 - Get answers to programming queries, roadmaps, tools, frameworks, etc.
 - Fast, smart, and developer-focused support.  
-  <img src="https://github.com/user-attachments/assets/a075f84d-fe68-4118-89c0-d06d47516bae" width="400"/>  
-  <img src="https://github.com/user-attachments/assets/533bf18e-8818-46d6-9440-1874c8823ded" width="400"/>
+  <img src="https://github.com/user-attachments/assets/a075f84d-fe68-4118-89c0-d06d47516bae" width="900"/> <img src="https://github.com/user-attachments/assets/533bf18e-8818-46d6-9440-1874c8823ded" width="900"/>
 
 ### Digital Tech Library
 - Upload, browse, and download computer science documents.
