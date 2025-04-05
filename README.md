@@ -19,7 +19,7 @@
 ### Digital Tech Library
 - Upload, browse, and download computer science documents.
 - A community-driven pool of technical resources.  
-  <img src="https://github.com/user-attachments/assets/20d59e94-0d70-44e4-9a26-5f78cbeb9388" width="400"/>
+  <img src="https://github.com/user-attachments/assets/20d59e94-0d70-44e4-9a26-5f78cbeb9388" width="900"/>
 ---
 
 ## Tech Stack
