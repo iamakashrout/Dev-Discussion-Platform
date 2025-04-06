@@ -17,7 +17,7 @@ const Login = ({ setAuth }) => {
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", response.data._id);
-        
+        localStorage.setItem("emailid", emailid);
         setAuth(true);  
         localStorage.setItem("userEmail", response.data.emailid);
         alert("Login successful!");
