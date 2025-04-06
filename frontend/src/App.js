@@ -9,9 +9,9 @@ import Resources from "./Resources.jsx";
 import Navbar from "./components/NavBar";
 import CategoryPage from "./CategoryPage";
 import UserList from "./UserList.jsx";
-// import ForgotPassword from "./components/ForgotPassword/ForgotPassword.jsx";
-// import VerifyOtp from "./components/ForgotPassword/VerifyOtp.jsx";
-// import ResetPassword from "./components/ForgotPassword/ResetPassword.jsx";
+import ForgotPassword from "./components/Password/ForgotPassword.jsx";
+import VerifyOtp from "./components/Password/VerifyOtp.jsx";
+import ResetPassword from "./components/Password/ResetPassword.jsx";
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(
@@ -44,6 +44,9 @@ function App() {
                     <Route path="/resources" element={isAuthenticated ? <Resources /> : <Navigate to="/login" />} />
                     <Route path="/category/:categoryName" element={<CategoryPage />} />
                     <Route path="/users" element={<UserList />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/verify-otp/:emailid" element={<VerifyOtp />} />  
+                    <Route path="/reset-password/:emailid" element={<ResetPassword />}/>
                 </Routes>
             </div>
         </Router>
