@@ -12,11 +12,11 @@ import {
   GlobalStyles,
 } from "@mui/material";
 
+import  BASE_URL from "./config"; 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const BASE_URL = "http://localhost:5000";
 
   // Get logged-in user ID from localStorage
   const currentUserId = localStorage.getItem("userId");
