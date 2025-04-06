@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import "./ResetPassword.css";
-import{BASE_URL} from "../config.js";
+import{BASE_URL} from "../../config";  
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

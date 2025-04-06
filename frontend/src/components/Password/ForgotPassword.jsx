@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import "./ForgotPassword.css";
-import{BASE_URL} from "../config.js";
+import{BASE_URL} from "../../config";  
  
 
 const ForgotPassword = () => {
