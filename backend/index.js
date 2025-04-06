@@ -6,7 +6,8 @@ import connectDB from "./db.js";
 // Import Routes
 import authRoutes from "./routes/authRoutes.js";
 import chatbotRoutes from "./routes/chatbotRoutes.js";
-import fileRoutes from "./routes/fileRoutes.js"; // ✅ fixed
+import fileRoutes from "./routes/fileRoutes.js"; 
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,7 @@ app.get("/api", (req, res) => {
 app.use("/api", chatbotRoutes);
 app.use("/auth", authRoutes);
 app.use("/api/media", fileRoutes); 
+app.use("/user", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

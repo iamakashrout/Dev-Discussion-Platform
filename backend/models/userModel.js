@@ -21,7 +21,7 @@ const schema=new mongoose.Schema({
     githubId:String,
     linkedinId:String,
     friends:{
-        type:Array,
+        type:[String],
         default:[],
     },
     location: 
