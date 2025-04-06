@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "./Register.css";
 import image from "./assets/image.png"; 
 import DevSphereLogo from "./DevSphere2.png";
-
+import BASE_URL from "./config";
 const Register = ({ setAuth }) => {
   const [formData, setFormData] = useState({
     emailid: "",
@@ -27,29 +27,53 @@ const Register = ({ setAuth }) => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:5000/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          friends: formData.friends.split(",").map((friend) => friend.trim()), // Convert friends to an array
-        }),
-      });
+  //   try {
+  //     const response = await fetch("http://localhost:5000/auth/register", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         ...formData,
+  //         friends: formData.friends.split(",").map((friend) => friend.trim()), // Convert friends to an array
+  //       }),
+  //     });
 
-      const data = await response.json();
-      if (data.success) {
-        localStorage.setItem("token", data.token);
-        setAuth(true);
-        navigate("/");
-      } else {
-        alert("Registration failed. Please try again.");
-      }
-    } catch (error) {
-      console.error("Registration error:", error);
-      alert("An error occurred during registration.");
+  //     const data = await response.json();
+  //     if (data.success) {
+  //       localStorage.setItem("token", data.token);
+  //       setAuth(true);
+  //       navigate("/");
+  //     } else {
+  //       alert("Registration failed. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Registration error:", error);
+  //     alert("An error occurred during registration.");
+  //   }
+  // };
+
+  try {
+    const response = await fetch(`${BASE_URL}/auth/sendOtp-register`, { // Call OTP API
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...formData,
+        friends: formData.friends.split(",").map((friend) => friend.trim()), // Convert friends to an array
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("OTP sent to your email. Please verify.");
+      navigate(`/verifyRegister-otp/${formData.emailid}`); // Redirect to OTP verification
+    } else {
+      alert(data.message || "Registration failed. Please try again.");
     }
-  };
+  } catch (error) {
+    console.error("Registration error:", error);
+    alert("An error occurred during registration.");
+  }
+};
+
 
   return (
     <div className="register-container">

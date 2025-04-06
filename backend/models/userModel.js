@@ -28,7 +28,14 @@ const schema=new mongoose.Schema({
     {
         type:String,
         required:true,
-    }
+    },
+    isVerified: {
+        type: Boolean,
+        default: false, 
+      },
+      otp: String, 
+      otpExpires: Date,
+    
 })
 
 const userModel=mongoose.model("users",schema);
