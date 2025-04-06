@@ -4,12 +4,12 @@ import { verifyToken } from "../middlewares/authMiddlewares.js";
 const router = express.Router();
 
 // to fetch all users
-router.get("/:id/getusers", fetchUsers);
+router.get("/:emailid/getusers", fetchUsers);
 
 /* READ */
-router.get("/:id/friends", getUserFriends);
+router.get("/:emailid/friends", getUserFriends);
 
 /* add/remove friend */
-router.patch("/:id/:friendId", addRemoveFriend);
+router.patch("/:emailid/:friendId", addRemoveFriend);
 
 export default router;
