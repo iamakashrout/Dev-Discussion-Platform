@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Register.css";
 import image from "./assets/image.png"; 
+import DevSphereLogo from "./DevSphere2.png";
 
 const Register = ({ setAuth }) => {
   const [formData, setFormData] = useState({
@@ -56,6 +57,8 @@ const Register = ({ setAuth }) => {
       <div className="register-image">
         <img src={image} alt="Welcome" />
         <div className="welcome-text">
+          <img src={DevSphereLogo} alt="DevSphere Logo" style={{ height: "200px", width: "auto" ,  marginBottom: "-50px"}} />
+          
         <h1>
       <span>Welcome to </span>
       <span style={{ color:  "#8a2be2"}}>Dev</span>
