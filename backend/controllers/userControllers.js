@@ -1,90 +1,79 @@
 import mongoose from "mongoose";
 import userModel from "../models/userModel.js";
 
-
 export const fetchUsers = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const { emailid } = req.params;
 
         const users = await userModel.find(
-            { _id: { $ne: userId } }, //to avoid to fetch the logged in user
-            'name location picturePath'
+            { emailid: { $ne: emailid } },
+            'emailid name location picturePath'
         );
+
         res.status(200).json(users);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
 
-
 export const getUserFriends = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { emailid } = req.params;
 
-        // Validate ObjectId for user
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: "Invalid user ID" });
-        }
-
-        const user = await userModel.findById(id);
+        // Find user by emailid
+        const user = await userModel.findOne({ emailid });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Validate all friendIds in the friends array
-        const validFriends = user.friends.filter((friendId) =>
-            mongoose.Types.ObjectId.isValid(friendId)
+        // Filter out empty or invalid friend IDs
+        const validFriendIds = user.friends.filter(id => mongoose.Types.ObjectId.isValid(id));
+
+        if (validFriendIds.length === 0) {
+            return res.status(200).json([]); // No valid friends
+        }
+
+        const friends = await userModel.find(
+            { _id: { $in: validFriendIds } },
+            'emailid name location picturePath'
         );
 
-        const friends = await Promise.all(
-            validFriends.map((friendId) => userModel.findById(friendId))
-        );
-
-        const formattedFriends = friends.map(
-            ({ _id, name, location, picturePath }) => {
-                return { _id, name, location, picturePath };
-            }
-        );
-
-        res.status(200).json(formattedFriends);
+        res.status(200).json(friends);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 };
 
+
 export const addRemoveFriend = async (req, res) => {
     try {
-        const { id, friendId } = req.params;
-        if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(friendId)) {
-            return res.status(400).json({ message: "Invalid user ID or friend ID" });
-        }
+        const { emailid, friendId } = req.params;
 
-        const user = await userModel.findById(id);
-        const friend = await userModel.findById(friendId);
+        const user = await userModel.findOne({ emailid });
+        const friend = await userModel.findOne({ emailid: friendId });
 
         if (!user || !friend) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        // Add or remove friend from the list
         if (user.friends.includes(friendId)) {
             user.friends = user.friends.filter((fId) => fId !== friendId);
-            friend.friends = friend.friends.filter((fId) => fId !== id);
+            friend.friends = friend.friends.filter((fId) => fId !== emailid);
         } else {
             user.friends.push(friendId);
-            friend.friends.push(id);
+            friend.friends.push(emailid);
         }
 
         await user.save();
         await friend.save();
 
-        const updatedUser = await userModel.findById(id).populate('friends', 'name location picturePath'); // Populate friends data
+        const friends = await Promise.all(
+            user.friends.map((friendEmail) =>
+                userModel.findOne({ emailid: friendEmail }, 'emailid name location picturePath')
+            )
+        );
 
-        const formattedFriends = updatedUser.friends.map(({ _id, name, location, picturePath }) => {
-            return { _id, name, location, picturePath };
-        });
-
-        res.status(200).json(formattedFriends);
+        res.status(200).json(friends.filter(Boolean));
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
