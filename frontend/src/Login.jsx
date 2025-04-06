@@ -4,6 +4,7 @@ import axios from "axios";
 import "./Login.css"; 
 import image from "./assets/image.png";
 import BASE_URL from "./config";
+import DevSphereLogo from "./DevSphere2.png";
 
 const Login = ({ setAuth }) => {
   const [emailid, setEmailId] = useState("");
@@ -35,6 +36,8 @@ const Login = ({ setAuth }) => {
       <div className="register-image">
         <img src={image} alt="Welcome" />
         <div className="welcome-text">
+        <img src={DevSphereLogo} alt="DevSphere Logo" style={{ height: "200px", width: "auto" ,  marginBottom: "-50px"}} />
+
           <h1>
             <span>Welcome back to </span>
             <span style={{ color: "#8a2be2" }}>Dev</span>

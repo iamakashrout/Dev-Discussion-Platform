@@ -7,6 +7,11 @@
       transform: translateY(-3px);
   }
 }
+.logo {
+  height: 100px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
 
 .navbar {
   display: flex;
