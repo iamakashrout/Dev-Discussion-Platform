@@ -18,6 +18,7 @@ const Login = ({ setAuth }) => {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", response.data._id);
         setAuth(true);  
+        localStorage.setItem("userEmail", response.data.emailid);
         alert("Login successful!");
         navigate("/home");
       } else {

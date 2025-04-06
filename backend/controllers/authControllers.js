@@ -62,7 +62,7 @@ export const login=async(req,resp)=>{
             return resp.status(401).json({message:"Invalid credentials. Please check again!"});
         }
         const token=jwt.sign({emailid:emailid},key);
-        resp.status(200).json({success:true, token, _id: user._id});
+        resp.status(200).json({success:true, token, emailid});
     }
     catch(error){
         resp.status(500).json({"error":error.message});
