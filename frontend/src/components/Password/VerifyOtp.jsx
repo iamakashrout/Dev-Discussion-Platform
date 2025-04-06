@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import "./VerifyOtp.css";
-import{BASE_URL} from "../../config";  
+import BASE_URL from "../../config";  
 
 const VerifyOtp = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
