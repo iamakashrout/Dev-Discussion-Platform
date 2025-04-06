@@ -12,7 +12,7 @@ import {
   GlobalStyles,
 } from "@mui/material";
 
-import { BASE_URL } from "./config"; 
+import  BASE_URL from "./config"; 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [connectedUsers, setConnectedUsers] = useState([]);
