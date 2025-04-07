@@ -10,13 +10,15 @@ import {
   CssBaseline,
   CircularProgress,
   GlobalStyles,
+  TextField
 } from "@mui/material";
 
-import  BASE_URL from "./config"; 
+import BASE_URL from "./config";
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(""); // state for search
 
   // Get logged-in user ID from localStorage
   const currentUserId = localStorage.getItem("userId");
@@ -37,8 +39,7 @@ const UserList = () => {
         setLoading(false);
       }
     };
-    
-    
+
     // const fetchConnectedUsers = async () => {
     //   try {
     //     const response = await fetch(${BASE_URL}/user/${currentUserId}/friends);
@@ -77,20 +78,20 @@ const UserList = () => {
         ? prev.filter((f) => f._id !== friendId) // Remove friend from state
         : [...prev, users.find((user) => user._id === friendId)] // Add friend to state
     );
-  
+
     try {
       const response = await fetch(`${BASE_URL}/user/${emailid}/${friendId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
       });
-  
+
       const result = await response.json();
       console.log("API Response:", response.status, result);
-  
+
       if (!response.ok) {
         throw new Error(`Failed to update friend list: ${result.message || response.statusText}`);
       }
-  
+
       // Fetch latest connected users from backend (optional)
       fetchConnectedUsers();
     } catch (error) {
@@ -99,7 +100,11 @@ const UserList = () => {
       fetchConnectedUsers();
     }
   };
-  
+
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.location?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
@@ -159,13 +164,54 @@ const UserList = () => {
             All Users
           </Typography>
 
+          {/* Search Bar */}
+
+          <Box mb={3} display="flex" flexDirection="column" alignItems="center">
+              <label
+                htmlFor="search-input"
+                style={{
+                  marginBottom: "8px",
+                  fontWeight: "bold",
+                  fontSize: "18px",
+                  color: "#fff",
+                }}
+              >
+                Search Users
+              </label>
+              <TextField
+                id="search-input"
+                type="text"
+                placeholder="Type a name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                variant="outlined"
+                fullWidth
+                sx={{
+                  backgroundColor: "#fff",
+                  borderRadius: "20px",
+                  maxWidth: "400px",
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "20px",
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  boxShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+                }}
+              />
+            </Box>
+
+
           {loading ? (
             <Box display="flex" justifyContent="center">
               <CircularProgress sx={{ color: "#ff7eb3" }} />
             </Box>
-          ) : users.length > 0 ? (
+          ) : filteredUsers.length > 0 ? (
             <Grid container spacing={4}>
-              {users.map((user) => (
+              {filteredUsers.map((user) => (
                 <Grid item xs={12} sm={6} md={4} key={user._id}>
                   <Card
                     sx={{
@@ -206,7 +252,7 @@ const UserList = () => {
                         }}
                         onClick={() => handleToggleFriend(user._id)}
                       >
-                      {connectedUsers.some(f => f._id === user._id) ? "Unfollow" : "Follow"}
+                        {connectedUsers.some(f => f._id === user._id) ? "Unfollow" : "Follow"}
                       </Button>
                     </CardContent>
                   </Card>
@@ -214,8 +260,8 @@ const UserList = () => {
               ))}
             </Grid>
           ) : (
-            <Typography variant="h5" align="center" sx={{ color: "#fff", fontWeight: "bold", width: "100%" }}>
-              No users found.
+            <Typography variant="h6" align="center" sx={{ color: "#fff", fontWeight: "bold", width: "100%" }}>
+              {searchTerm ? "No users match your search." : "No users found."}
             </Typography>
           )}
         </Box>
@@ -252,7 +298,7 @@ const UserList = () => {
                   "&::-webkit-scrollbar": { width: "3px" },
                   "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.1)", borderRadius: "10px" },
                   "&::-webkit-scrollbar-track": { background: "transparent" },
-                  }}
+                }}
               >
                 <Avatar src={user.picturePath || "https://via.placeholder.com/50"} sx={{ width: 50, height: 50, mr: 2 }} />
                 <Typography variant="body1" sx={{ fontWeight: "bold", color: "#fff" }}>
