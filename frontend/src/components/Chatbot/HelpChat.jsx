@@ -88,29 +88,138 @@ export default function HelpChat({ onClose }) {
         }
     };
 
+    const speak = (text, message) => {
+        if (typeof window !== "undefined" && "speechSynthesis" in window) {
+            if (speech) {
+                speechSynthesis.cancel();
+            }
+            const utterance = new SpeechSynthesisUtterance(text);
+            const words = text.split(/\s+/);
+            setHighlightedMessage(message);
+
+            utterance.onboundary = (event) => {
+                if (event.name === "word") {
+                    const charIndex = event.charIndex;
+                    let wordIndex = 0;
+                    let charCount = 0;
+
+                    for (let i = 0; i < words.length; i++) {
+                        charCount += words[i].length + 1;
+                        if (charIndex < charCount) {
+                            wordIndex = i;
+                            break;
+                        }
+                    }
+                    setCurrentWordIndex(wordIndex);
+                }
+            };
+
+            utterance.onstart = () => {
+                setIsSpeaking(true);
+                setIsPaused(false);
+            };
+
+            utterance.onend = () => {
+                setIsSpeaking(false);
+                setIsPaused(false);
+                setCurrentWordIndex(null);
+                setHighlightedMessage(null);
+            };
+
+            setSpeech(utterance);
+            speechSynthesis.speak(utterance);
+        }
+    };
+
+    const pauseSpeech = () => {
+        if (speech) {
+            speechSynthesis.pause();
+            setIsPaused(true);
+        }
+    };
+
+    const resumeSpeech = () => {
+        if (speech) {
+            speechSynthesis.resume();
+            setIsPaused(false);
+        }
+    };
+
     return (
         <div className="help-chat">
             <div className="help-chat-header">
                 <h2>DevSphere Bot</h2>
                 <button className="help-chat-close" onClick={onClose}>✕</button>
             </div>
+    
             <div className="help-chat-body">
                 {messages.length === 0 && (
                     <p className="placeholder-text">
                         Here to help, chat away, or give suggestions!
                     </p>
                 )}
+    
                 {messages.map((msg, index) => (
-                    <div
-                        key={index}
-                        className={`message ${msg.role === "user" ? "user-message" : "bot-message"}`}
-                    >
-                        {formatMessage(msg.content)}
+                    <div key={index} className={`message ${msg.role === "user" ? "user-message" : "bot-message"}`}>
+                        
+                        {/* Render content with formatting or word-by-word highlighting */}
+                        {msg.role !== "user" && highlightedMessage === msg ? (
+                            <span>
+                                {msg.content.split(/\s+/).map((word, i) => (
+                                    <span
+                                        key={i}
+                                        className={i === currentWordIndex ? "highlighted-word" : ""}
+                                    >
+                                        {word + " "}
+                                    </span>
+                                ))}
+                            </span>
+                        ) : (
+                            <div>{formatMessage(msg.content)}</div>
+                        )}
+    
+                        {/* TTS Controls */}
+                        {msg.role === "assistant" && (
+                            <div className="speech-controls">
+                                <button
+                                    className="speak-button"
+                                    onClick={() => speak(msg.content, msg)}
+                                    title="Speak"
+                                >
+                                    <Volume2 size={14} />
+                                </button>
+    
+                                {isSpeaking && (
+                                    <>
+                                        <button
+                                            className="pause-button"
+                                            onClick={pauseSpeech}
+                                            title="Pause"
+                                            disabled={isPaused}
+                                        >
+                                            Pause
+                                        </button>
+                                        {isPaused && (
+                                            <button
+                                                className="resume-button"
+                                                onClick={resumeSpeech}
+                                                title="Resume"
+                                            >
+                                                Resume
+                                            </button>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        )}
                     </div>
                 ))}
+    
                 {loading && <p className="loading">Loading...</p>}
                 <div ref={messagesEndRef} />
             </div>
+    
+            {/* Input & Voice Search */}
             <form onSubmit={sendMessage} className="help-chat-footer">
                 <div className="input-wrapper">
                     <input
@@ -126,6 +235,6 @@ export default function HelpChat({ onClose }) {
                     {loading ? "Loading..." : "Send"}
                 </button>
             </form>
-        </div >
+        </div>
     );
 }
