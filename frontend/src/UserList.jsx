@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Avatar,
   Button,
@@ -10,28 +10,30 @@ import {
   CssBaseline,
   CircularProgress,
   GlobalStyles,
-  TextField
+  TextField,
+  IconButton,
+  InputAdornment
 } from "@mui/material";
+import { Mic, MicOff } from "@mui/icons-material";
 
 import BASE_URL from "./config";
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(""); // state for search
+  const [searchTerm, setSearchTerm] = useState("");
+  const [listening, setListening] = useState(false);
 
-  // Get logged-in user ID from localStorage
+  const recognitionRef = useRef(null);
   const currentUserId = localStorage.getItem("userId");
   const emailid = localStorage.getItem("emailid");
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const response = await fetch(`${BASE_URL}/user/${emailid}/getusers`);
         const data = await response.json();
-        
-        // Filter out the logged-in user
         const filteredUsers = data.filter(user => user._id !== currentUserId);
-        
         setUsers(filteredUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -40,20 +42,9 @@ const UserList = () => {
       }
     };
 
-    // const fetchConnectedUsers = async () => {
-    //   try {
-    //     const response = await fetch(${BASE_URL}/user/${currentUserId}/friends);
-    //     const data = await response.json();
-    //     setConnectedUsers(data);
-    //   } catch (error) {
-    //     console.error("Error fetching connected users:", error);
-    //   }
-    // };
-
     fetchUsers();
     fetchConnectedUsers();
   }, [currentUserId]);
-
 
   const fetchConnectedUsers = async () => {
     try {
@@ -65,18 +56,16 @@ const UserList = () => {
     }
   };
 
-
   const handleToggleFriend = async (friendId) => {
     if (!currentUserId) {
       console.error("User ID not found in localStorage");
       return;
     }
-  
-    // Optimistic UI Update (Update State First)
+
     setConnectedUsers((prev) =>
       prev.some((f) => f._id === friendId)
-        ? prev.filter((f) => f._id !== friendId) // Remove friend from state
-        : [...prev, users.find((user) => user._id === friendId)] // Add friend to state
+        ? prev.filter((f) => f._id !== friendId)
+        : [...prev, users.find((user) => user._id === friendId)]
     );
 
     try {
@@ -86,18 +75,52 @@ const UserList = () => {
       });
 
       const result = await response.json();
-      console.log("API Response:", response.status, result);
-
       if (!response.ok) {
         throw new Error(`Failed to update friend list: ${result.message || response.statusText}`);
       }
 
-      // Fetch latest connected users from backend (optional)
       fetchConnectedUsers();
     } catch (error) {
       console.error("Error toggling friend status:", error);
-      // Revert UI change if API call fails
       fetchConnectedUsers();
+    }
+  };
+
+  // Voice Search Setup
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.lang = "en-US";
+
+      recognitionRef.current.onresult = (event) => {
+        let transcript = event.results[0][0].transcript;
+        transcript = transcript.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, ""); // remove punctuation
+        setSearchTerm(transcript);
+        setListening(false);
+      };
+
+      recognitionRef.current.onerror = (err) => {
+        console.error("Voice recognition error:", err);
+        setListening(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        setListening(false);
+      };
+    }
+  }, []);
+
+  const toggleVoiceSearch = () => {
+    if (!recognitionRef.current) return;
+
+    if (!listening) {
+      recognitionRef.current.start();
+      setListening(true);
+    } else {
+      recognitionRef.current.stop();
+      setListening(false);
     }
   };
 
@@ -147,7 +170,6 @@ const UserList = () => {
           gap: 3,
         }}
       >
-        {/* Users List */}
         <Box
           sx={{
             flex: 2,
@@ -157,7 +179,7 @@ const UserList = () => {
             boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.3)",
             background: "linear-gradient(135deg, #1e3c72, #6a1b9a)",
             color: "#fff",
-            height: "700px", // <-- fix height
+            height: "700px",
             display: "flex",
             flexDirection: "column",
           }}
@@ -166,7 +188,6 @@ const UserList = () => {
             All Users
           </Typography>
 
-          {/* Search Bar */}
           <Box mb={3} display="flex" flexDirection="column" alignItems="center">
             <label
               htmlFor="search-input"
@@ -194,13 +215,27 @@ const UserList = () => {
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "20px",
                 },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none",
-                },
-                "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  border: "none",
-                },
                 boxShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleVoiceSearch}
+                      sx={{
+                        backgroundColor: "#8e24aa",
+                        color: "#fff",
+                        width: 36,
+                        height: 36,
+                        borderRadius: "50%", // Makes it a circle
+                        "&:hover": {
+                          backgroundColor: "#7b1fa2",
+                        },
+                      }}
+                      >
+                      {listening ? <MicOff color="error" /> : <Mic />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
               }}
             />
           </Box>
@@ -225,7 +260,10 @@ const UserList = () => {
                         background: "rgba(255, 255, 255, 0.1)",
                         backdropFilter: "blur(10px)",
                         border: "1px solid rgba(255, 255, 255, 0.2)",
-                        "&:hover": { transform: "scale(1.05)", boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.4)" },
+                        "&:hover": {
+                          transform: "scale(1.05)",
+                          boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.4)",
+                        },
                       }}
                     >
                       <Avatar
@@ -249,11 +287,13 @@ const UserList = () => {
                             px: 4,
                             py: 1,
                             borderRadius: "20px",
-                            "&:hover": { background: "linear-gradient(135deg, #6a1b9a,rgb(159, 67, 105))" },
+                            "&:hover": {
+                              background: "linear-gradient(135deg, #6a1b9a, rgb(159, 67, 105))",
+                            },
                           }}
                           onClick={() => handleToggleFriend(user._id)}
                         >
-                          {connectedUsers.some(f => f._id === user._id) ? "Unfollow" : "Follow"}
+                          {connectedUsers.some((f) => f._id === user._id) ? "Unfollow" : "Follow"}
                         </Button>
                       </CardContent>
                     </Card>
@@ -268,7 +308,6 @@ const UserList = () => {
           </Box>
         </Box>
 
-        {/* Connected Users List */}
         <Box
           sx={{
             flex: 1,
@@ -278,7 +317,7 @@ const UserList = () => {
             boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.3)",
             background: "linear-gradient(135deg, #6a1b9a, #1e3c72)",
             color: "#fff",
-            height: "700px", // <-- fix height
+            height: "700px",
             display: "flex",
             flexDirection: "column",
           }}
@@ -301,9 +340,6 @@ const UserList = () => {
                     background: "rgba(255, 255, 255, 0.1)",
                     backdropFilter: "blur(8px)",
                     border: "1px solid rgba(255, 255, 255, 0.2)",
-                    "&::-webkit-scrollbar": { width: "3px" },
-                    "&::-webkit-scrollbar-thumb": { background: "rgba(255,255,255,0.1)", borderRadius: "10px" },
-                    "&::-webkit-scrollbar-track": { background: "transparent" },
                   }}
                 >
                   <Avatar src={user.picturePath || "https://via.placeholder.com/50"} sx={{ width: 50, height: 50, mr: 2 }} />
