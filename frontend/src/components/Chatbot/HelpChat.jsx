@@ -1,11 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import "./HelpChat.css";
 import BASE_URL from "../../config";
+import { Volume2 } from "lucide-react";
+import VoiceSearch from "./voicespeech.jsx";
 
 export default function HelpChat({ onClose }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
+    const [speech, setSpeech] = useState(null);
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+    const [currentWordIndex, setCurrentWordIndex] = useState(null);
+    const [highlightedMessage, setHighlightedMessage] = useState(null);
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -14,15 +21,15 @@ export default function HelpChat({ onClose }) {
 
     const formatMessage = (content) => {
         content = content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-    
+
         // Format headings with proper spacing
         content = content.replace(/(^|\n)### (.*?)(\n|$)/g, "<h3>$2</h3><br>");
         content = content.replace(/(^|\n)## (.*?)(\n|$)/g, "<h2>$2</h2><br>");
         content = content.replace(/(^|\n)# (.*?)(\n|$)/g, "<h1>$2</h1><br>");
-    
+
         // Format inline code (`code`)
         content = content.replace(/`(.*?)`/g, "<code>$1</code>");
-    
+
         // Format code blocks (``````)
         const codeBlockRegex = /``````/g;
         if (codeBlockRegex.test(content)) {
@@ -36,18 +43,18 @@ export default function HelpChat({ onClose }) {
                 )
             );
         }
-    
+
         const formattedContent = content
             .split("\n")
             .map((line, index) => {
                 if (line.trim() === "") return <br key={index} />; // Add empty lines as breaks
                 return <p key={index} dangerouslySetInnerHTML={{ __html: line }} />;
             });
-    
+
         return formattedContent;
     };
-    
-    
+
+
 
     const sendMessage = async (event) => {
         event.preventDefault();
@@ -105,17 +112,20 @@ export default function HelpChat({ onClose }) {
                 <div ref={messagesEndRef} />
             </div>
             <form onSubmit={sendMessage} className="help-chat-footer">
-                <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Type your message here..."
-                    className="chat-input"
-                />
+                <div className="input-wrapper">
+                    <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        placeholder="Type your message here..."
+                        className="chat-input"
+                    />
+                    <VoiceSearch onSearch={(transcript) => setInput(transcript)} />
+                </div>
                 <button type="submit" className="send-button" disabled={loading}>
                     {loading ? "Loading..." : "Send"}
                 </button>
             </form>
-        </div>
+        </div >
     );
 }
