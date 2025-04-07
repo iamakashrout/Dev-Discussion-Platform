@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "./components/NavBar";
 import HelpButton from "./components/Chatbot/HelpButton";
 import HelpChat from "./components/Chatbot/HelpChat";
 import BASE_URL from "./config";
+import { Mic } from "lucide-react";
 
 import "./ResourcesPage.css";
 import { Link } from "react-router-dom";
@@ -25,6 +26,8 @@ const Home = () => {
   const [category, setCategory] = useState("");
   const [file, setFile] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef(null);
   const userEmail = localStorage.getItem("userEmail");
 
   const fetchDocuments = async () => {
@@ -40,6 +43,40 @@ const Home = () => {
   useEffect(() => {
     fetchDocuments();
   }, []);
+
+  useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      console.warn("Speech Recognition not supported");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+      let transcript = event.results[0][0].transcript;
+      transcript = transcript.trim().replace(/[\p{P}\p{S}]+$/gu, ""); // Remove trailing punctuation/symbols
+      setSearchTerm(transcript);
+    };
+
+    recognition.onend = () => {
+      setListening(false);
+    };
+
+    recognitionRef.current = recognition;
+  }, []);
+
+  const handleVoiceSearch = () => {
+    if (recognitionRef.current) {
+      setListening(true);
+      recognitionRef.current.start();
+    }
+  };
 
   const uploadDocument = async () => {
     if (!file || !title || !category) {
@@ -144,12 +181,22 @@ const Home = () => {
 
         {/* Search Section */}
         <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search by title..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div className="search-wrapper">
+            <input
+              type="text"
+              placeholder="Search by title..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <button
+              className={`mic-icon ${listening ? "glow" : ""}`}
+              onClick={handleVoiceSearch}
+              title="Voice Search"
+            >
+              <Mic size={18} />
+            </button>
+          </div>
         </div>
 
         {/* Search Result */}
