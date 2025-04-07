@@ -19,42 +19,34 @@ export default function HelpChat({ onClose }) {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    const formatMessage = (content) => {
+    const formatMessage = (content, isHighlighting = false, highlightIndex = null) => {
         content = content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-
-        // Format headings with proper spacing
         content = content.replace(/(^|\n)### (.*?)(\n|$)/g, "<h3>$2</h3><br>");
         content = content.replace(/(^|\n)## (.*?)(\n|$)/g, "<h2>$2</h2><br>");
         content = content.replace(/(^|\n)# (.*?)(\n|$)/g, "<h1>$2</h1><br>");
-
-        // Format inline code (`code`)
         content = content.replace(/`(.*?)`/g, "<code>$1</code>");
 
-        // Format code blocks (``````)
-        const codeBlockRegex = /``````/g;
-        if (codeBlockRegex.test(content)) {
-            return content.split(codeBlockRegex).map((part, index) =>
-                index % 2 === 1 ? (
-                    <pre key={index} className="code-block">
-                        <code>{part.trim()}</code>
-                    </pre>
-                ) : (
-                    <p key={index} dangerouslySetInnerHTML={{ __html: part }} />
-                )
+        if (isHighlighting) {
+            const words = content.split(/\s+/);
+            return (
+                <span>
+                    {words.map((word, i) => (
+                        <span
+                            key={i}
+                            className={i === highlightIndex ? "highlighted-word" : ""}
+                        >
+                            {word + " "}
+                        </span>
+                    ))}
+                </span>
             );
         }
 
-        const formattedContent = content
-            .split("\n")
-            .map((line, index) => {
-                if (line.trim() === "") return <br key={index} />; // Add empty lines as breaks
-                return <p key={index} dangerouslySetInnerHTML={{ __html: line }} />;
-            });
-
-        return formattedContent;
+        return content.split("\n").map((line, index) => {
+            if (line.trim() === "") return <br key={index} />;
+            return <p key={index} dangerouslySetInnerHTML={{ __html: line }} />;
+        });
     };
-
-
 
     const sendMessage = async (event) => {
         event.preventDefault();
@@ -93,6 +85,7 @@ export default function HelpChat({ onClose }) {
             if (speech) {
                 speechSynthesis.cancel();
             }
+
             const utterance = new SpeechSynthesisUtterance(text);
             const words = text.split(/\s+/);
             setHighlightedMessage(message);
@@ -151,34 +144,23 @@ export default function HelpChat({ onClose }) {
                 <h2>DevSphere Bot</h2>
                 <button className="help-chat-close" onClick={onClose}>✕</button>
             </div>
-    
+
             <div className="help-chat-body">
                 {messages.length === 0 && (
                     <p className="placeholder-text">
                         Here to help, chat away, or give suggestions!
                     </p>
                 )}
-    
+
                 {messages.map((msg, index) => (
-                    <div key={index} className={`message ${msg.role === "user" ? "user-message" : "bot-message"}`}>
-                        
-                        {/* Render content with formatting or word-by-word highlighting */}
-                        {msg.role !== "user" && highlightedMessage === msg ? (
-                            <span>
-                                {msg.content.split(/\s+/).map((word, i) => (
-                                    <span
-                                        key={i}
-                                        className={i === currentWordIndex ? "highlighted-word" : ""}
-                                    >
-                                        {word + " "}
-                                    </span>
-                                ))}
-                            </span>
-                        ) : (
-                            <div>{formatMessage(msg.content)}</div>
-                        )}
-    
-                        {/* TTS Controls */}
+                    <div
+                        key={index}
+                        className={`message ${msg.role === "user" ? "user-message" : "bot-message"}`}
+                    >
+                        {msg.role === "assistant" && highlightedMessage === msg
+                            ? formatMessage(msg.content, true, currentWordIndex)
+                            : formatMessage(msg.content)}
+
                         {msg.role === "assistant" && (
                             <div className="speech-controls">
                                 <button
@@ -188,7 +170,7 @@ export default function HelpChat({ onClose }) {
                                 >
                                     <Volume2 size={14} />
                                 </button>
-    
+
                                 {isSpeaking && (
                                     <>
                                         <button
@@ -214,12 +196,11 @@ export default function HelpChat({ onClose }) {
                         )}
                     </div>
                 ))}
-    
+
                 {loading && <p className="loading">Loading...</p>}
                 <div ref={messagesEndRef} />
             </div>
-    
-            {/* Input & Voice Search */}
+
             <form onSubmit={sendMessage} className="help-chat-footer">
                 <div className="input-wrapper">
                     <input

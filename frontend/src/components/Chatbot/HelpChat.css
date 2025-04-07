@@ -408,3 +408,11 @@
     background: gray;
     cursor: not-allowed;
 }
+
+.highlighted-word {
+    background-color: #d4bfff;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+
