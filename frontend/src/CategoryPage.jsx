@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "./components/NavBar";
 import "./CategoryPage.css"; // 👈 Importing new CSS file
+import BASE_URL from "./config";
 
 const CategoryPage = () => {
   const { categoryName } = useParams();
@@ -9,7 +10,7 @@ const CategoryPage = () => {
 
   useEffect(() => {
     const fetchDocs = async () => {
-      const res = await fetch('${BASE_URL}/api/media');
+      const res = await fetch(`${BASE_URL}/api/media`);
       const data = await res.json();
       const filtered = data.filter(doc => doc.category === categoryName);
       setDocs(filtered);

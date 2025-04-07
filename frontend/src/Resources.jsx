@@ -32,7 +32,7 @@ console.log(userEmail);
 
   const fetchDocuments = async () => {
     try {
-      const res = await fetch('${BASE_URL}/api/media');
+      const res = await fetch(`${BASE_URL}/api/media`);
       const data = await res.json();
       setDocs(data);
     } catch (error) {
@@ -59,11 +59,11 @@ console.log(userEmail);
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("upload_preset", "oneworld");
+      formData.append("upload_preset", "DevSphere");
 
       const cloudinaryEndpoint = file.type === "application/pdf"
-        ? "https://api.cloudinary.com/v1_1/dx31kszy8/raw/upload"
-        : "https://api.cloudinary.com/v1_1/dx31kszy8/image/upload";
+        ? "https://api.cloudinary.com/v1_1/ddenfqz4u/raw/upload"
+        : "https://api.cloudinary.com/v1_1/ddenfqz4u/image/upload";
 
       const cloudinaryRes = await fetch(cloudinaryEndpoint, {
         method: "POST",
@@ -73,7 +73,7 @@ console.log(userEmail);
       const cloudinaryData = await cloudinaryRes.json();
       const documentUrl = cloudinaryData.secure_url;
 
-      await fetch('${BASE_URL}/api/media', {
+      await fetch(`${BASE_URL}/api/media`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, document: documentUrl, category, email : userEmail }),
