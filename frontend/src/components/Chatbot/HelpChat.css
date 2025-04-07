@@ -369,3 +369,42 @@
     color: white;
     cursor: pointer;
 }
+
+.tts-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-left: 6px;
+    transition: color 0.2s ease;
+}
+
+.tts-button:hover {
+    color: #bb86fc;
+}
+
+.speak-button, .pause-button, .resume-button {
+    background: linear-gradient(135deg, #7b3fe4, #9b50ff);
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 2px 6px rgba(155, 80, 255, 0.4);
+    margin: 4px;
+}
+
+.speak-button:hover, .pause-button:hover, .resume-button:hover {
+    background: linear-gradient(135deg, #9b50ff, #bb86fc);
+    box-shadow: 0 4px 10px rgba(155, 80, 255, 0.8);
+    transform: scale(1.05);
+}
+
+.speak-button:disabled, .pause-button:disabled, .resume-button:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
