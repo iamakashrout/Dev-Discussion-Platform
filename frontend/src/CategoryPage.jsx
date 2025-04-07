@@ -1,34 +1,54 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Navbar from "./components/NavBar";
-import "./CategoryPage.css"; // 👈 Importing new CSS file
+import "./CategoryPage.css";
 import BASE_URL from "./config";
 
 const CategoryPage = () => {
   const { categoryName } = useParams();
   const [docs, setDocs] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchDocs = async () => {
-      const res = await fetch(`${BASE_URL}/api/media`);
-      const data = await res.json();
-      const filtered = data.filter(doc => doc.category === categoryName);
-      setDocs(filtered);
+      try {
+        const res = await fetch(`${BASE_URL}/api/media`);
+        const data = await res.json();
+        const filtered = data.filter(doc => doc.category === categoryName);
+        setDocs(filtered);
+      } catch (error) {
+        console.error("Error fetching documents:", error);
+      }
     };
     fetchDocs();
   }, [categoryName]);
+
+  // Filter based on search query
+  const filteredDocs = docs.filter(doc =>
+    doc.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <>
       <Navbar />
       <div className="category-container">
-        <br></br>
         <h2 className="category-title">{categoryName}</h2>
+
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search documents..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
+
         <div className="docs-grid">
-          {docs.length === 0 ? (
-            <p className="empty-message">No documents found in this category.</p>
+          {filteredDocs.length === 0 ? (
+            <p className="empty-message">No documents found.</p>
           ) : (
-            docs.map(doc => (
+            filteredDocs.map(doc => (
               <div className="doc-card" key={doc._id}>
                 <h3 className="doc-title">{doc.title}</h3>
                 <p className="doc-email"><strong>Uploaded By:</strong> {doc.email}</p>
