@@ -14,56 +14,61 @@
     background: #ffffff;
     padding: 3rem;
     border-radius: 15px;
-    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
     width: 100%;
     max-width: 500px;
     text-align: center;
-    transition: all 0.3s ease-in-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .edit-profile-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.25);
 }
 
 /* Title */
 .edit-profile-title {
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: 700;
     color: #333;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 /* Input Fields */
 .edit-field {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
     text-align: left;
 }
 
 .edit-field label {
     font-size: 1rem;
     font-weight: 600;
-    color: #444;
+    color: #555;
     margin-bottom: 0.5rem;
     display: block;
+    transition: color 0.3s ease;
 }
 
 .edit-field input {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
     border-radius: 8px;
     font-size: 1rem;
+    background: #f9f9f9;
     transition: all 0.3s ease;
 }
 
 .edit-field input:focus {
     border-color: #6a11cb;
-    box-shadow: 0 0 8px rgba(106, 17, 203, 0.2);
+    box-shadow: 0 0 10px rgba(106, 17, 203, 0.3);
+    background: #fff;
     outline: none;
 }
 
-/* Buttons */
+/* Button Group */
 .button-group {
     display: flex;
     justify-content: space-between;
@@ -78,26 +83,54 @@
     transition: all 0.3s ease-in-out;
     cursor: pointer;
     border: none;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Save Button */
 .button-group .save-button {
-    background: #28a745;
+    background: linear-gradient(135deg, #28a745, #1e7e34);
     color: white;
 }
 
 .button-group .save-button:hover {
-    background: #218838;
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #218838, #16632e);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
 }
 
 /* Cancel Button */
 .button-group .cancel-button {
-    background: #6c757d;
+    background: linear-gradient(135deg, #6c757d, #495057);
     color: white;
 }
 
 .button-group .cancel-button:hover {
-    background: #5a6268;
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #5a6268, #343a40);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .edit-profile-card {
+        padding: 2rem;
+    }
+
+    .edit-profile-title {
+        font-size: 1.6rem;
+    }
+
+    .edit-field input {
+        padding: 10px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .button-group button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }

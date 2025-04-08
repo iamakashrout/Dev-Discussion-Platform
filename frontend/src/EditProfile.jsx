@@ -6,7 +6,9 @@ import "./EditProfile.css";
 
 const EditProfile = () => {
     const navigate = useNavigate();
-    const { emailid } = useParams(); 
+    // const { emailid } = useParams(); 
+
+    const emailid = localStorage.getItem("emailid"); 
 
     const [formData, setFormData] = useState({
         name: "",
