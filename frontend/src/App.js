@@ -13,6 +13,7 @@ import ForgotPassword from "./components/Password/ForgotPassword.jsx";
 import VerifyOtp from "./components/Password/VerifyOtp.jsx";
 import ResetPassword from "./components/Password/ResetPassword.jsx";
 import VerifyOtpRegister from "./components/Password/VerifyOtpRegister.jsx";
+import ProfilePage from "./Profile.jsx";
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(
         !!localStorage.getItem("token")
@@ -48,6 +49,9 @@ function App() {
                     <Route path="/verify-otp/:emailid" element={<VerifyOtp />} />  
                     <Route path="/reset-password/:emailid" element={<ResetPassword />}/>
                     <Route path="/verifyRegister-otp/:email" element={<VerifyOtpRegister />} />
+
+                    
+                    <Route path="/profile/:emailid" element={<ProfilePage />} />
                 </Routes>
             </div>
         </Router>
