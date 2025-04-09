@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js";
 import chatbotRoutes from "./routes/chatbotRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js"; 
 import userRoutes from "./routes/userRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -30,8 +31,9 @@ app.use("/api", chatbotRoutes);
 app.use("/auth", authRoutes);
 app.use("/api/media", fileRoutes); 
 app.use("/user", userRoutes);
+app.use("/post", postRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5999;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
