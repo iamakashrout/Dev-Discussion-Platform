@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import "./createPost.css";
 import BASE_URL from "../../config";
 import Navbar from "../NavBar";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
+    const navigate = useNavigate();
+
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -44,7 +47,7 @@ const CreatePost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+    
     try {
       const pictureUrls = await uploadImagesToCloudinary();
       console.log("picture urls are ", pictureUrls);
@@ -68,6 +71,8 @@ const CreatePost = () => {
       alert("Post created successfully!");
       setDescription("");
       setImages([]);
+
+      navigate("/posts");
     } catch (err) {
       console.error("Error creating post:", err.message);
       alert("Something went wrong.");
@@ -94,9 +99,10 @@ const CreatePost = () => {
             accept="image/*"
             onChange={handleImageChange}
             />
-          <button type="submit" disabled={loading}>
+          <button disabled={loading}>
             {loading ? "Posting..." : "Create Post"}
           </button>
+         
         </form>
       </div>
     </>
