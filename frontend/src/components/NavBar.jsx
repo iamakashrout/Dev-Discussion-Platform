@@ -25,6 +25,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
 
       <ul>
         <li><button onClick={() => navigate("/home")}>Home</button></li>
+        <li><button onClick={() => navigate("/posts")}>Posts</button></li>
         <li><button onClick={() => navigate("/dashboard")}>Dashboard</button></li>
         <li><button onClick={() => navigate("/users")}>Network</button></li>
         <li><button onClick={() => navigate("/resources")}>Resources</button></li>
