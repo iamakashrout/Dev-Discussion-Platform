@@ -17,6 +17,8 @@ const Login = ({ setAuth }) => {
       const response = await axios.post(`${BASE_URL}/auth/login`, { emailid, password });
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data._id);
+        localStorage.setItem("emailid", emailid);
         setAuth(true);  
         localStorage.setItem("userEmail", response.data.emailid);
         alert("Login successful!");
@@ -52,7 +54,10 @@ const Login = ({ setAuth }) => {
           <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           <button type="submit">Login</button>
           <p>Not a member? <Link to="/register" className="login-link">Register here</Link></p>
+          <p><Link to="/forgot-password" className="login-link">Forgot Password?</Link></p>
         </form>
+        <div style={{ textAlign: "center", marginTop: "10px" }}>
+        </div>
       </div>
     </div>
   );

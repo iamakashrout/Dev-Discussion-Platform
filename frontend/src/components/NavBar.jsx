@@ -15,6 +15,7 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
 
   if (!isAuthenticated) return null;
 
+  const emailid = localStorage.getItem("emailid");
   return (
     <nav className="navbar">
       <div className="app-name" onClick={() => navigate("/")}>
@@ -24,9 +25,11 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
 
       <ul>
         <li><button onClick={() => navigate("/home")}>Home</button></li>
+        <li><button onClick={() => navigate("/posts")}>Posts</button></li>
         <li><button onClick={() => navigate("/dashboard")}>Dashboard</button></li>
-        <li><button onClick={() => navigate("/network")}>Network</button></li>
+        <li><button onClick={() => navigate("/users")}>Network</button></li>
         <li><button onClick={() => navigate("/resources")}>Resources</button></li>
+        <li><button onClick={() => navigate(`/profile/${emailid}`)}>Profile</button></li>
         <li><button className="logout-btn" onClick={handleLogout}>Sign Out</button></li>
       </ul>
     </nav>

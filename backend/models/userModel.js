@@ -21,14 +21,21 @@ const schema=new mongoose.Schema({
     githubId:String,
     linkedinId:String,
     friends:{
-        type:Array,
+        type:[String],
         default:[],
     },
     location: 
     {
         type:String,
         required:true,
-    }
+    },
+    isVerified: {
+        type: Boolean,
+        default: false, 
+      },
+      otp: String, 
+      otpExpires: Date,
+    
 })
 
 const userModel=mongoose.model("users",schema);
