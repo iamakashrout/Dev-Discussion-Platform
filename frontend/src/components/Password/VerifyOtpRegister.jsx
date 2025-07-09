@@ -40,6 +40,7 @@ const VerifyOtpRegister = () => {
             toast.error("Please enter the complete OTP.");
             return;
         }
+        console.log("otp", enteredOtp);
 
         setIsVerifying(true);
 
