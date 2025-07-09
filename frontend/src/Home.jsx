@@ -3,7 +3,7 @@ import Navbar from "./components/NavBar";
 import HelpButton from "./components/Chatbot/HelpButton";
 import HelpChat from "./components/Chatbot/HelpChat";
 
-import bg from "./bg2.png";
+import bg from "./bg4.png";
 import "./ResourcesPage.css";
 
 const Home = () => {
