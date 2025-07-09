@@ -16,10 +16,10 @@ const app = express();
 connectDB();
 
 // Middleware
+app.use(express.json());
 app.use(cors({
   origin: '*'
 }));
-app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello, Node.js server running!");
