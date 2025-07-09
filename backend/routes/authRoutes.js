@@ -14,6 +14,6 @@ router.post("/send-otp/:emailid", sendOtp);
 router.post("/verify-otp/:emailid", verifyOtp);
 router.post("/reset-password/:emailid", resetPassword);
 router.post("/sendOtp-register", sendOtpRegister);
-router.post("/verify-register/:email", verifyRegister);
+router.post("/verify-register/:emailid", verifyRegister);
 
 export default router;
