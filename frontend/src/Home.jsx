@@ -5,6 +5,7 @@ import HelpChat from "./components/Chatbot/HelpChat";
 
 import bg from "./bg4.png";
 import "./ResourcesPage.css";
+import "./home.css"; 
 
 const Home = () => {
   const [showHelpChat, setShowHelpChat] = useState(false);
@@ -12,16 +13,15 @@ const Home = () => {
   return (
     <div className="full-page">
       {/* Background Image */}
-      <img src={bg} alt="Background" className="background-image" />
 
       {/* Navbar */}
       <Navbar />
 
       {/* Centered Text */}
-      <div className="centered-text">
+      {/* <div className="centered-text">
         <h1><span className="highlight">Dev</span>Sphere</h1>
         <h2>Where ideas become tangible.</h2>
-      </div>
+      </div> */}
 
       {/* Chatbot */}
       <div className="help-container">
